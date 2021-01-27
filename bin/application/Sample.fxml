@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SampleController">
+   <top>
+      <AnchorPane onZoom="#start" prefHeight="386.0" prefWidth="947.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button layoutX="23.0" layoutY="347.0" mnemonicParsing="false" onAction="#conectToSim" prefHeight="25.0" prefWidth="283.0" text="התחבר לסימולטור" textFill="#06046b">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+            <Button layoutX="326.0" layoutY="27.0" mnemonicParsing="false" onAction="#runCode" text="הפעל" />
+            <Button layoutX="505.0" layoutY="27.0" mnemonicParsing="false" onAction="#loadCode" text="טען קוד" />
+            <Button layoutX="65.0" layoutY="24.0" mnemonicParsing="false" onMouseClicked="#calcPath" text="חשב מסלול" />
+            <Circle fx:id="limitofJoistic" fill="DODGERBLUE" layoutX="751.0" layoutY="181.0" radius="100.0" stroke="BLACK" strokeType="INSIDE" />
+            <Slider accessibleText="rubbr" layoutX="653.0" layoutY="313.0" prefHeight="14.0" prefWidth="197.0" />
+            <Circle fx:id="joistic" fill="#811fff" layoutX="751.0" layoutY="181.0" radius="33.0" stroke="BLACK" strokeType="INSIDE" />
+            <Slider layoutX="608.0" layoutY="71.0" orientation="VERTICAL" prefHeight="249.0" prefWidth="14.0" />
+            <Separator layoutX="307.0" layoutY="1.0" orientation="VERTICAL" prefHeight="337.0" prefWidth="7.0" />
+            <Separator layoutX="577.0" layoutY="1.0" orientation="VERTICAL" prefHeight="337.0" prefWidth="7.0" />
+            <TextArea fx:id="codeArea" layoutX="326.0" layoutY="68.0" prefHeight="255.0" prefWidth="234.0" />
+            <Button layoutX="166.0" layoutY="24.0" mnemonicParsing="false" onAction="#loadMap" text="טען מפה" />
+            <Label layoutX="699.0" layoutY="24.0" text="&lt; aileron &gt;">
+               <font>
+                  <Font size="21.0" />
+               </font>
+            </Label>
+            <Label layoutX="825.0" layoutY="166.0" rotate="90.0" text="&lt; elevator &gt;">
+               <font>
+                  <Font size="21.0" />
+               </font>
+            </Label>
+            <RadioButton layoutX="621.0" layoutY="31.0" mnemonicParsing="false" text="Manual" />
+            <Separator layoutX="-3.0" layoutY="339.0" prefHeight="2.0" prefWidth="919.0" />
+            <TextField fx:id="portOut" layoutX="720.0" layoutY="350.0" prefHeight="25.0" prefWidth="63.0" promptText="5402" text="5402" />
+            <TextField fx:id="ipOut" layoutX="618.0" layoutY="350.0" prefHeight="25.0" prefWidth="63.0" promptText="127.0.0.1" text="127.0.0.1" />
+            <TextField fx:id="portIn" layoutX="435.0" layoutY="347.0" prefHeight="25.0" prefWidth="43.0" promptText="5400" text="5400" />
+            <TextField fx:id="ipIn" layoutX="329.0" layoutY="347.0" prefHeight="25.0" prefWidth="65.0" promptText="127.0.0.1" text="127.0.0.1" />
+            <Label layoutX="796.0" layoutY="351.0" text="כתוב אל פורט:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="694.0" layoutY="351.0" text=":ip">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="487.0" layoutY="350.0" text="קרא מפורט:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="405.0" layoutY="351.0" text=":ip">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Canvas fx:id="map" height="252.0" layoutX="23.0" layoutY="70.0" width="263.0" />
+         </children>
+         <BorderPane.margin>
+            <Insets right="-29.0" />
+         </BorderPane.margin></AnchorPane>
+   </top>
+</BorderPane>
