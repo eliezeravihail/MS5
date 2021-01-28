@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import Model.pathCalc;
 import javafx.beans.property.DoubleProperty;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -101,7 +102,7 @@ public class SampleController implements Initializable{
     	}
     };
     public void calcPath() throws Exception{
-//    	Map.calcAndDrewPath(map);
+    	Map.calcAndDrewPath(map);
     	System.out.println("calc");
     }
     @Override
@@ -111,7 +112,7 @@ public class SampleController implements Initializable{
 		joistic.setOnMouseReleased(Released);
 		map.setOnMouseClicked(markTarget);
 		try {
-			Map.drewPlane(map, 3, 4);
+			Map.drewPlane(map, 5, 5);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

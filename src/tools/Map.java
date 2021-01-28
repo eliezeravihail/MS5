@@ -3,6 +3,7 @@ package tools;
 import java.io.File;
 import java.util.Arrays;
 
+import Model.pathCalc;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.canvas.Canvas;
@@ -20,6 +21,9 @@ public class Map {
 	static int planeY = 0;
 	public static double targetX = 0;
 	public static double targetY = 0 ;
+	private static pathCalc calcer = new pathCalc(metrix);
+
+
 
     public static void drewMap(int[][] newMap, Canvas map) throws Exception {
         if(newMap == null){throw new Exception("new Map is null, load valid map!");}
@@ -77,8 +81,8 @@ public class Map {
      }
 
     public static void drewPlane(Canvas map, int x, int y) throws Exception {
-        planeX = x;
-        planeY = y;
+        Map.planeX = x;
+        Map.planeY = y;
     	redraw(map);
      }
 
@@ -111,8 +115,26 @@ public class Map {
         gc.moveTo(vector[i][0]*HRel-HRel/2,vector[i][1]*WRel-HRel/2);
         gc.lineTo(vector[i+1][0]*HRel-HRel/2,vector[i+1][1]*WRel-HRel/2);
         gc.stroke();
-        }
 	}
+	}
+
+	public static void calcAndDrewPath(Canvas map) throws Exception {
+		double HRel = map.getHeight() / metrix.length;
+        double WRel = map.getWidth() / metrix[0].length;
+//		int[][] way = calcer.calc(new int[]{(int)(planeX/WRel),(int)(planeY/HRel)},new int[]{(int)(targetX/WRel),(int)(targetY/HRel)});
+		calcAndDrewPath(map, new int[]{(int)(planeX),(int)planeY},new int[]{(int)(targetX),(int)(targetY)});
+
+	}
+	public static void calcAndDrewPath(Canvas map, int[] from, int[] to) throws Exception {
+		double H = map.getHeight();
+        double W = map.getWidth();
+        double HRel = H / metrix.length;
+        double WRel = W / metrix[0].length;
+		GraphicsContext gc = map.getGraphicsContext2D();
+        gc.setLineWidth(1);
+    	gc.setFill(Color.BLUE);
+        gc.strokeLine(from[0]*HRel,from[1]*WRel,to[0],to[1]);
+    	}
 
 
 
