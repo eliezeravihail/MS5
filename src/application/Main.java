@@ -21,7 +21,22 @@ public class Main extends Application {
 		}
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
+		new Thread(()->{
+			try {
+				speaker.speak();
+				Thread.sleep(100);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+			}
+		}).start();
+//		new Thread(()->{
+//			try {
+//				listener.listen();
+//			} catch (Exception e) {
+//				// TODO Auto-generated catch block
+//			}
+//		}).start();
 		launch(args);
 	}
 }

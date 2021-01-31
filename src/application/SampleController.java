@@ -1,6 +1,7 @@
 package application;
 
 import java.io.BufferedReader;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -9,18 +10,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import com.sun.javafx.webkit.ThemeClientImpl;
+
 import Model.pathCalc;
+import Model.theListener;
+import Model.theSpeaker;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import tools.Map;
+import application.Data;
 
 public class SampleController implements Initializable{
     private String[] code;
@@ -28,14 +37,6 @@ public class SampleController implements Initializable{
     private Canvas map;
     @FXML
     private TextArea codeArea;
-    @FXML
-	private TextField portOut;
-	@FXML
-	private TextField ipOut;
-	@FXML
-	private TextField portIn;
-	@FXML
-	private TextField ipIn;
 	@FXML
 	private Circle joistic;
 	@FXML
@@ -43,12 +44,17 @@ public class SampleController implements Initializable{
 	private double orginalCenterY;
 	private double orginalCenterX;
 	private boolean joisticIsClic = false;
+	private static Data data = new Data();
 
 	@FXML
-	private DoubleProperty throttle;
+	Slider throttle;
 
 	@FXML
-	private DoubleProperty rudder;
+	Slider rudder;
+
+	@FXML
+	RadioButton manoal;
+
 
 	public void start(){
 
@@ -111,6 +117,11 @@ public class SampleController implements Initializable{
 		joistic.setOnMouseDragged(Dragged);
 		joistic.setOnMouseReleased(Released);
 		map.setOnMouseClicked(markTarget);
+		throttle.setOnMouseDragged(totChan);
+		rudder.setOnMouseDragged(rubChan);
+
+
+
 		try {
 			Map.drewPlane(map, 5, 5);
 		} catch (Exception e) {
@@ -121,11 +132,16 @@ public class SampleController implements Initializable{
 
     }
 
-    public void conectToSim() {
-		System.out.println("conection....");
+    @SuppressWarnings("deprecation")
+	public void conectToSim() throws NumberFormatException, IOException, InterruptedException {
+
 	}
 
-
+    public void manoalRun(){
+    	if(manoal.isSelected()){
+    		Data.manoal =  true;
+    	}
+    }
     public void continiuJ() {
 		if(!joisticIsClic){return;}
     	double Radiuslimit = limitofJoistic.getRadius();
@@ -152,7 +168,6 @@ public class SampleController implements Initializable{
         	orginalCenterX = joistic.getCenterX();
             orginalCenterY = joistic.getCenterY();
             startJ();
-    		System.out.println("start");
 
     	}
     };
@@ -161,7 +176,6 @@ public class SampleController implements Initializable{
 		@Override
 		public void handle(MouseEvent t) {
         	stopJ();
-    		System.out.println("stop");
 
             }
 	};
@@ -171,16 +185,39 @@ public class SampleController implements Initializable{
         public void handle(MouseEvent e) {
     		double  transX = e.getX();
             double  transY = e.getY();
-            System.out.println((orginalCenterX+transX)+"all");
-            System.out.println(orginalCenterX+"org");
-            System.out.println(transX+"move");
-            if(inLimit(orginalCenterX+transX,orginalCenterY+transY)){
+            if(inLimit(orginalCenterX+transX,orginalCenterY+transY) && manoal.isSelected()){
             	joistic.setCenterY(orginalCenterY+transY);
             	joistic.setCenterX(orginalCenterX+transX);
-            	Data.getTheData().put("aileron", ""+Math.abs(orginalCenterX-transX));
-            	Data.getTheData().put("elevator", ""+Math.abs(orginalCenterY-transY));
+            	data.getTheData().put("aileron", ""+normalJoy(limitofJoistic.getCenterX()-transX));
+            	data.getTheData().put("elevator", ""+normalJoy(limitofJoistic.getCenterY()-transY));
+            	Data.update = true;
             }
     	}
+	};
+
+
+    EventHandler<MouseEvent> rubChan = new EventHandler<MouseEvent>() {
+        	@Override
+            public void handle(MouseEvent e) {
+                if(manoal.isSelected() ){
+                	data.getTheData().put("rudder", ""+rudder.getValue());
+                	Data.update = true;
+                }
+        	}
+    	};
+
+    EventHandler<MouseEvent> totChan = new EventHandler<MouseEvent>() {
+        	@Override
+            public void handle(MouseEvent e) {
+                if(manoal.isSelected()){
+                	data.getTheData().put("throttle",""+throttle.getValue());
+
+                	Data.update = true;
+                }
+        	}
+    	};
+
+
 
 
 
@@ -192,8 +229,10 @@ public class SampleController implements Initializable{
 			}
 			return false;
 		}
-	};
 
+	private double normalJoy(double x){
+		return (2*(x/limitofJoistic.getRadius())-1);
+	}
 	private double OcDist(double x1, double y1, double x2, double y2){
 		double sum = Math.pow((x1-x2),2)+Math.pow((y1-y2),2);
 		return Math.abs(Math.sqrt(sum));
